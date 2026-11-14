@@ -6,10 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
 
-/**
- * Pruebas de las estructuras y del flujo del sistema, sin dependencias
- * externas. Cada verificación cuenta un caso y al final se informa el total.
- */
 public final class PruebasTaller {
 
     private static int pruebas;

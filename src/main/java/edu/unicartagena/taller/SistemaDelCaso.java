@@ -5,26 +5,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/**
- * Clase de ejecución del caso 19: coordina la lista general, la cola de
- * pendientes y la pila de historial, y expone el menú de consola.
- *
- * <p>La clase separa dos responsabilidades para que la lógica pueda
- * probarse sin depender del teclado:</p>
- * <ul>
- *   <li>Los métodos públicos {@code registrar}, {@code procesarSiguiente},
- *       {@code cancelarPendiente}, {@code deshacerUltimoProcesamiento} y
- *       {@code buscarPorCodigo} contienen las reglas del negocio y no
- *       imprimen nada.</li>
- *   <li>Los métodos privados del menú leen datos, llaman a esas reglas y
- *       presentan el resultado en el {@link PrintStream} recibido.</li>
- * </ul>
- *
- * <p>Las tres estructuras guardan referencias al mismo objeto
- * {@link EquipoReparacion}. No se crean copias: cuando un equipo cambia de
- * estado, el cambio se refleja en la lista, en la cola y en la pila. Esa
- * decisión mantiene consistente el flujo y evita duplicar información.</p>
- */
 public final class SistemaDelCaso {
 
     private final Lista listaGeneral = new Lista();
@@ -33,10 +13,6 @@ public final class SistemaDelCaso {
     private final Scanner entrada;
     private final PrintStream salida;
 
-    /**
-     * @param entrada lector de datos del usuario
-     * @param salida  destino de los mensajes del sistema
-     */
     public SistemaDelCaso(Scanner entrada, PrintStream salida) {
         if (entrada == null || salida == null) {
             throw new IllegalArgumentException("La entrada y la salida son obligatorias.");
@@ -45,13 +21,6 @@ public final class SistemaDelCaso {
         this.salida = salida;
     }
 
-    /**
-     * Punto de entrada. Sin argumentos inicia el menú interactivo; con el
-     * argumento {@code --demo} ejecuta una demostración automática que
-     * sirve como evidencia de funcionamiento.
-     *
-     * @param args argumentos de la línea de comandos
-     */
     public static void main(String[] args) {
         SistemaDelCaso sistema = new SistemaDelCaso(new Scanner(System.in), System.out);
         if (args.length > 0 && "--demo".equalsIgnoreCase(args[0])) {
@@ -61,32 +30,11 @@ public final class SistemaDelCaso {
         }
     }
 
-    // ------------------------------------------------------------------
-    // Reglas del negocio (sin entrada ni salida)
-    // ------------------------------------------------------------------
-
-    /**
-     * Construye y registra un equipo nuevo.
-     *
-     * @return equipo registrado
-     */
     public EquipoReparacion registrar(String codigo, String cliente,
                                       String tipoEquipo, String fallaReportada) {
         return registrar(new EquipoReparacion(codigo, cliente, tipoEquipo, fallaReportada));
     }
 
-    /**
-     * Registra un equipo en la lista general y lo encola para atención.
-     *
-     * <p>Primero valida que el código no exista. Después fuerza el estado
-     * {@code PENDIENTE}, agrega el objeto a la lista y lo encola. La lista
-     * conserva el registro histórico; la cola define el orden de atención
-     * FIFO.</p>
-     *
-     * @param equipo equipo que se desea registrar
-     * @return el mismo equipo registrado
-     * @throws IllegalArgumentException si el equipo es nulo o su código ya existe
-     */
     public EquipoReparacion registrar(EquipoReparacion equipo) {
         if (equipo == null) {
             throw new IllegalArgumentException("El equipo es obligatorio.");
@@ -101,16 +49,6 @@ public final class SistemaDelCaso {
         return equipo;
     }
 
-    /**
-     * Atiende el siguiente equipo pendiente.
-     *
-     * <p>Desencola el frente (FIFO), lo marca como {@code REPARADO} y lo
-     * apila en el historial. El equipo sigue estando en la lista general,
-     * por lo que su registro completo no se pierde.</p>
-     *
-     * @return equipo procesado
-     * @throws NoSuchElementException si no hay equipos pendientes
-     */
     public EquipoReparacion procesarSiguiente() {
         EquipoReparacion equipo = (EquipoReparacion) colaPendientes.desencolar();
         equipo.setEstado(EquipoReparacion.Estado.REPARADO);
@@ -118,16 +56,6 @@ public final class SistemaDelCaso {
         return equipo;
     }
 
-    /**
-     * Deshace el último procesamiento.
-     *
-     * <p>Desapila la cima del historial, devuelve el equipo al estado
-     * {@code PENDIENTE} y lo encola de nuevo. Por la regla de la cola, la
-     * reincorporación ocurre al final, no en la posición original.</p>
-     *
-     * @return equipo devuelto a la cola
-     * @throws NoSuchElementException si el historial está vacío
-     */
     public EquipoReparacion deshacerUltimoProcesamiento() {
         EquipoReparacion equipo = (EquipoReparacion) historialProcesados.desapilar();
         equipo.setEstado(EquipoReparacion.Estado.PENDIENTE);
@@ -135,20 +63,6 @@ public final class SistemaDelCaso {
         return equipo;
     }
 
-    /**
-     * Cancela un equipo pendiente usando una cola auxiliar.
-     *
-     * <p>La cola no permite extraer un nodo del centro. Por eso se
-     * desencola todo: los equipos que no coinciden pasan a la cola
-     * auxiliar y luego regresan a la cola original en el mismo orden. El
-     * equipo buscado se descarta de la cola, pero permanece en la lista
-     * general con estado {@code CANCELADO}.</p>
-     *
-     * @param codigo código de servicio del equipo
-     * @return equipo cancelado
-     * @throws NoSuchElementException  si el código no existe
-     * @throws IllegalStateException   si el equipo no está pendiente
-     */
     public EquipoReparacion cancelarPendiente(String codigo) {
         EquipoReparacion equipo = buscarPorCodigo(codigo);
         if (equipo.getEstado() != EquipoReparacion.Estado.PENDIENTE) {
@@ -179,17 +93,6 @@ public final class SistemaDelCaso {
         return equipo;
     }
 
-    /**
-     * Busca un equipo por su código en la lista general.
-     *
-     * <p>El recorrido es secuencial porque la lista enlazada no permite
-     * acceso directo por clave. Se compara con el código normalizado de la
-     * entidad, que es la clave definida en {@code equals}.</p>
-     *
-     * @param codigo código de servicio buscado
-     * @return equipo encontrado
-     * @throws NoSuchElementException si no existe
-     */
     public EquipoReparacion buscarPorCodigo(String codigo) {
         String buscado = normalizarCodigo(codigo);
         for (int i = 0; i < listaGeneral.cuentaElementos(); i++) {
@@ -201,33 +104,18 @@ public final class SistemaDelCaso {
         throw new NoSuchElementException("No se encontró un equipo con código " + buscado + ".");
     }
 
-    /**
-     * @return cantidad de equipos en la lista general
-     */
     public int contarRegistrados() {
         return listaGeneral.cuentaElementos();
     }
 
-    /**
-     * @return cantidad de equipos pendientes en la cola
-     */
     public int contarPendientes() {
         return colaPendientes.tamanio();
     }
 
-    /**
-     * @return cantidad de equipos en el historial
-     */
     public int contarProcesados() {
         return historialProcesados.tamanio();
     }
 
-    /**
-     * Cuenta los equipos que tienen un estado determinado.
-     *
-     * @param estado estado consultado
-     * @return cantidad de coincidencias en la lista general
-     */
     public int contarPorEstado(EquipoReparacion.Estado estado) {
         int total = 0;
         for (int i = 0; i < listaGeneral.cuentaElementos(); i++) {
@@ -255,14 +143,6 @@ public final class SistemaDelCaso {
         return historialProcesados.mostrar();
     }
 
-    // ------------------------------------------------------------------
-    // Menú interactivo
-    // ------------------------------------------------------------------
-
-    /**
-     * Ejecuta el menú obligatorio de diez opciones hasta que el usuario
-     * elige salir.
-     */
     public void ejecutarMenu() {
         salida.println("=== TALLER DE COMPUTADORES - GESTIÓN DE REPARACIONES ===");
         salida.println("Caso 19: lista general, cola de pendientes e historial de procesados");
@@ -385,10 +265,6 @@ public final class SistemaDelCaso {
                 + contarPorEstado(EquipoReparacion.Estado.CANCELADO));
     }
 
-    /**
-     * Traduce el estado del equipo a una ubicación comprensible para el
-     * usuario.
-     */
     private String ubicacion(EquipoReparacion equipo) {
         return switch (equipo.getEstado()) {
             case PENDIENTE -> "cola de pendientes";
@@ -396,10 +272,6 @@ public final class SistemaDelCaso {
             case CANCELADO -> "lista general (cancelado, fuera de la cola)";
         };
     }
-
-    // ------------------------------------------------------------------
-    // Entrada de datos
-    // ------------------------------------------------------------------
 
     private int leerOpcion() {
         while (true) {
@@ -435,15 +307,6 @@ public final class SistemaDelCaso {
         return entrada.nextLine();
     }
 
-    // ------------------------------------------------------------------
-    // Demostración automática
-    // ------------------------------------------------------------------
-
-    /**
-     * Ejecuta un recorrido completo del sistema sin intervención del
-     * usuario. Sirve como evidencia reproducible para el informe y el
-     * video de sustentación.
-     */
     public void ejecutarDemostracion() {
         salida.println("=== DEMOSTRACIÓN AUTOMÁTICA - CASO 19 ===");
         salida.println("Taller de computadores: lista, cola FIFO y pila LIFO");
