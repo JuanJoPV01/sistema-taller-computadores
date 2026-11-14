@@ -83,14 +83,8 @@ sistema-taller-computadores/
 │   │   └── SistemaDelCaso.java       # Menú, reglas y demostración
 │   └── test/java/edu/unicartagena/taller/
 │       └── PruebasTaller.java        # 130 verificaciones sin JUnit
-├── docs/
-│   ├── informe.md                    # Informe de desarrollo
-│   ├── generar_informe.py            # Generador del PDF
-│   ├── generar_evidencia.py          # Captura UTF-8 de la ejecución
-│   └── entregables/                  # Evidencias y código comprimido
 ├── ejecutar.ps1                      # Compila y ejecuta el menú
 ├── probar.ps1                        # Compila y ejecuta las pruebas
-├── generar-entregables.ps1           # Regenera evidencias, PDF y ZIP
 ├── .gitignore
 └── README.md
 ```
@@ -99,7 +93,6 @@ sistema-taller-computadores/
 
 - **JDK 17** o superior (`javac` y `java` en el `PATH`).
 - PowerShell 5.1 o superior en Windows.
-- Python 3 con `reportlab` solo si se desea regenerar el PDF.
 
 ## Cómo ejecutar
 
@@ -164,8 +157,7 @@ Pendientes después de cancelar:
 [2] EQ-005 | Cliente: Sofía Herrera | Equipo: Monitor Samsung | Falla: Sin señal HDMI | Estado: PENDIENTE
 ```
 
-La evidencia completa está en
-[`docs/entregables/evidencia-ejecucion.txt`](docs/entregables/evidencia-ejecucion.txt).
+La salida completa se obtiene ejecutando `.\ejecutar.ps1 --demo`.
 
 ## Decisiones de diseño
 
@@ -194,30 +186,8 @@ La evidencia completa está en
 
 ## Historial de Git
 
-El repositorio se construyó con commits progresivos, uno por cada avance
-funcional:
+El repositorio conserva commits progresivos. Para revisarlos:
 
-```text
-chore: inicializar repositorio y estructura base
-feat: implementar nodo enlazado reutilizable
-feat: implementar lista doblemente enlazada con recorridos
-feat: implementar cola FIFO con nodos enlazados
-feat: implementar pila LIFO para el historial
-feat: modelar equipo de reparacion del caso 19
-feat: implementar sistema y menu con flujo lista-cola-pila
-test: agregar 130 verificaciones de estructuras y flujo
-docs: documentar sistema y resultados
-docs: generar informe PDF y empaquetar entregables
-docs: corregir referencia del video y actualizar entregables
-actualizacion: quitar referencia pendiente del video
-actualizacion: quitar PDF del repositorio
+```powershell
+git log --oneline
 ```
-
-Cada commit se subió al repositorio remoto después de compilar y, cuando
-correspondía, ejecutar las pruebas.
-
-## Entregables
-
-- [`docs/entregables/evidencia-ejecucion.txt`](docs/entregables/evidencia-ejecucion.txt)
-- [`docs/entregables/codigo-fuente.zip`](docs/entregables/codigo-fuente.zip)
-- Código fuente en `src/`.
