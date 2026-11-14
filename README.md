@@ -87,7 +87,7 @@ sistema-taller-computadores/
 │   ├── informe.md                    # Informe de desarrollo
 │   ├── generar_informe.py            # Generador del PDF
 │   ├── generar_evidencia.py          # Captura UTF-8 de la ejecución
-│   └── entregables/                  # PDF, evidencias y código comprimido
+│   └── entregables/                  # Evidencias y código comprimido
 ├── ejecutar.ps1                      # Compila y ejecuta el menú
 ├── probar.ps1                        # Compila y ejecuta las pruebas
 ├── generar-entregables.ps1           # Regenera evidencias, PDF y ZIP
@@ -210,6 +210,7 @@ docs: documentar sistema y resultados
 docs: generar informe PDF y empaquetar entregables
 docs: corregir referencia del video y actualizar entregables
 actualizacion: quitar referencia pendiente del video
+actualizacion: quitar PDF del repositorio
 ```
 
 Cada commit se subió al repositorio remoto después de compilar y, cuando
@@ -217,7 +218,6 @@ correspondía, ejecutar las pruebas.
 
 ## Entregables
 
-- [`docs/entregables/Informe-Actividad-U2.pdf`](docs/entregables/Informe-Actividad-U2.pdf)
 - [`docs/entregables/evidencia-ejecucion.txt`](docs/entregables/evidencia-ejecucion.txt)
 - [`docs/entregables/codigo-fuente.zip`](docs/entregables/codigo-fuente.zip)
 - Código fuente en `src/`.
