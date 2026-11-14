@@ -16,11 +16,9 @@ implementadas desde cero con nodos enlazados.
 - **Estudiante:** Juan José Puello Valdez
 - **Código:** 7502510043
 
-## Repositorio y sustentación
+## Repositorio
 
 - **GitHub:** <https://github.com/JuanJoPV01/sistema-taller-computadores>
-- **Video de sustentación:** pendiente de publicar (se agregará en la
-  sección 4 del informe y en este README antes de la entrega).
 
 ## ¿Qué problema resuelve?
 
@@ -211,6 +209,7 @@ test: agregar 130 verificaciones de estructuras y flujo
 docs: documentar sistema y resultados
 docs: generar informe PDF y empaquetar entregables
 docs: corregir referencia del video y actualizar entregables
+actualizacion: quitar referencia pendiente del video
 ```
 
 Cada commit se subió al repositorio remoto después de compilar y, cuando
