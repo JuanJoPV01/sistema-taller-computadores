@@ -20,7 +20,7 @@ implementadas desde cero con nodos enlazados.
 
 - **GitHub:** <https://github.com/JuanJoPV01/sistema-taller-computadores>
 - **Video de sustentación:** pendiente de publicar (se agregará en la
-  sección 5 del informe y en este README antes de la entrega).
+  sección 4 del informe y en este README antes de la entrega).
 
 ## ¿Qué problema resuelve?
 
@@ -210,6 +210,7 @@ feat: implementar sistema y menu con flujo lista-cola-pila
 test: agregar 130 verificaciones de estructuras y flujo
 docs: documentar sistema y resultados
 docs: generar informe PDF y empaquetar entregables
+docs: corregir referencia del video y actualizar entregables
 ```
 
 Cada commit se subió al repositorio remoto después de compilar y, cuando

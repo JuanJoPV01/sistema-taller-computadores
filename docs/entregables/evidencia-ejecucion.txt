@@ -2,7 +2,7 @@
 EVIDENCIA DE EJECUCIÓN - ACTIVIDAD UNIDAD 2 - CASO 19
 Sistema de gestión de reparaciones - Taller de computadores
 Estudiante: Juan José Puello Valdez - Código: 7502510043
-Fecha de generación: 2026-11-14 11:14:18
+Fecha de generación: 2026-11-14 11:19:01
 ================================================================
 
 >>> DEMOSTRACIÓN AUTOMÁTICA (java ... --demo)
